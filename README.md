@@ -10,7 +10,7 @@ A production-ready SaaS web application that monitors website SEO health, keywor
 - 📈 **SEO Scoring**: Intelligent SEO health scoring with actionable recommendations
 - 🌐 **Multi-website Management**: Track unlimited websites from a single dashboard
 - 📄 **Export Functionality**: Generate CSV and PDF reports
-- ⚡ **Automated Sync**: Daily data synchronization via Vercel cron jobs
+- ⚡ **Automated Sync**: Daily data synchronization via Netlify functions
 - 🌙 **Dark/Light Mode**: Beautiful responsive design with theme switching
 - 📱 **Mobile-first**: Fully responsive design optimized for all devices
 
@@ -23,7 +23,7 @@ A production-ready SaaS web application that monitors website SEO health, keywor
 - **External APIs**: Google Search Console API, Google Analytics Reporting API
 - **Charts**: Recharts
 - **Icons**: Lucide React
-- **Deployment**: Vercel (with edge functions and cron jobs)
+- **Deployment**: Netlify (with serverless functions)
 
 ## Prerequisites
 
@@ -95,23 +95,33 @@ NODE_ENV="development"
 
 ## Deployment
 
-### Vercel Deployment
+### Netlify Deployment
 
-1. **Connect to Vercel**:
-   ```bash
-   npm i -g vercel
-   vercel login
-   vercel
-   ```
+1. **Connect to Netlify**:
+   - Push your code to GitHub
+   - Connect your repository to Netlify
+   - Set build command: `npm run build`
+   - Set publish directory: `out`
 
-2. **Set environment variables in Vercel**:
+2. **Set environment variables in Netlify**:
    - Add all environment variables from `.env.local`
-   - Set `NEXTAUTH_URL` to your production domain
+   - Set `NEXTAUTH_URL` to your Netlify domain
+   - Update `netlify.toml` with your actual domain
 
 3. **Deploy**:
+   - Netlify will automatically deploy on git push
+   - Or trigger manual deployment from Netlify dashboard
+
+### Manual Deployment
+
+1. **Build the project**:
    ```bash
-   vercel --prod
+   npm run build
    ```
+
+2. **Upload to Netlify**:
+   - Drag and drop the `out` folder to Netlify
+   - Or use Netlify CLI: `netlify deploy --prod --dir=out`
 
 ## Usage
 
@@ -123,7 +133,7 @@ NODE_ENV="development"
 
 ## Available Scripts
 
-- `npm run dev` - Start development server with Turbopack
+- `npm run dev` - Start development server
 - `npm run build` - Build for production
 - `npm run start` - Start production server
 - `npm run lint` - Run ESLint
@@ -131,4 +141,4 @@ NODE_ENV="development"
 - `npm run db:push` - Push schema changes to database
 - `npm run db:studio` - Open Drizzle Studio
 
-Built with ❤️ using Next.js 14, TypeScript, and Vercel.
+Built with ❤️ using Next.js 14, TypeScript, and Netlify.

@@ -117,9 +117,11 @@ export default async function Home() {
         </div>
       </main>
 
-      <footer className="border-t bg-white/80 backdrop-blur-sm mt-16">
-        <div className="container mx-auto px-4 py-8 text-center text-gray-600">
-          <p>&copy; 2025 SEO SiteWatcher. Built with Next.js and deployed on Vercel.</p>
+      <footer className="bg-background border-t">
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center text-muted-foreground">
+            <p>&copy; 2025 SEO SiteWatcher. Built with Next.js and deployed on Netlify.</p>
+          </div>
         </div>
       </footer>
     </div>
