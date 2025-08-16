@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO SiteWatcher - Dashboard Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            overflow: hidden;
+        }
+        
+        .container {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid #e2e8f0;
+            padding: 24px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            margin-bottom: 32px;
+        }
+        
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: #3b82f6;
+            border-radius: 8px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 24px;
+            color: #64748b;
+            text-decoration: none;
+            margin: 4px 0;
+        }
+        
+        .nav-item.active {
+            background: #eff6ff;
+            color: #3b82f6;
+            border-right: 3px solid #3b82f6;
+        }
+        
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            background: currentColor;
+            opacity: 0.6;
+        }
+        
+        /* Main Content */
+        .main {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+        }
+        
+        .header {
+            margin-bottom: 32px;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            color: #64748b;
+            font-size: 16px;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .stat-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .stat-title {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        
+        .stat-description {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+        
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .card-header {
+            padding: 24px 24px 16px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+        
+        .card-description {
+            font-size: 14px;
+            color: #64748b;
+        }
+        
+        .card-content {
+            padding: 24px;
+        }
+        
+        /* SEO Score */
+        .seo-score {
+            text-align: center;
+        }
+        
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, #10b981 0%, #10b981 75%, #e5e7eb 75%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            position: relative;
+        }
+        
+        .score-circle::before {
+            content: '';
+            width: 90px;
+            height: 90px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+        }
+        
+        .score-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0f172a;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .score-label {
+            font-size: 14px;
+            color: #10b981;
+            font-weight: 600;
+        }
+        
+        /* Chart */
+        .chart-container {
+            height: 200px;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chart-line {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            height: 2px;
+            background: #3b82f6;
+            transform-origin: left;
+        }
+        
+        .chart-line::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            left: 30%;
+            width: 2px;
+            height: 60px;
+            background: #3b82f6;
+        }
+        
+        .chart-line::after {
+            content: '';
+            position: absolute;
+            top: -80px;
+            right: 20%;
+            width: 2px;
+            height: 80px;
+            background: #3b82f6;
+        }
+        
+        /* Keywords Table */
+        .keywords-table {
+            grid-column: 1 / -1;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .table th {
+            text-align: left;
+            padding: 16px;
+            border-bottom: 1px solid #e2e8f0;
+            font-weight: 600;
+            color: #64748b;
+            font-size: 14px;
+        }
+        
+        .table td {
+            padding: 16px;
+            border-bottom: 1px solid #f1f5f9;
+            color: #0f172a;
+        }
+        
+        .keyword {
+            font-weight: 500;
+        }
+        
+        .position {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .position.top3 {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .position.top10 {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .position.other {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">🔍</div>
+                <span style="font-weight: 600; font-size: 18px;">SEO SiteWatcher</span>
+            </div>
+            
+            <nav>
+                <a href="#" class="nav-item active">
+                    <div class="nav-icon"></div>
+                    Dashboard
+                </a>
+                <a href="#" class="nav-item">
+                    <div class="nav-icon"></div>
+                    Websites
+                </a>
+                <a href="#" class="nav-item">
+                    <div class="nav-icon"></div>
+                    Reports
+                </a>
+                <a href="#" class="nav-item">
+                    <div class="nav-icon"></div>
+                    Settings
+                </a>
+            </nav>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main">
+            <div class="header">
+                <h1>Dashboard</h1>
+                <p>Welcome back! Here's how your SEO is performing.</p>
+            </div>
+            
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Total Websites</span>
+                    </div>
+                    <div class="stat-value">3</div>
+                    <div class="stat-description">Connected websites</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Tracked Keywords</span>
+                    </div>
+                    <div class="stat-value">247</div>
+                    <div class="stat-description">Keywords being monitored</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Average Position</span>
+                    </div>
+                    <div class="stat-value">8.3</div>
+                    <div class="stat-description">Average search ranking</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Average CTR</span>
+                    </div>
+                    <div class="stat-value">3.4%</div>
+                    <div class="stat-description">Click-through rate</div>
+                </div>
+            </div>
+            
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- SEO Score Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">SEO Score</h3>
+                        <p class="card-description">Overall SEO health based on your keyword performance</p>
+                    </div>
+                    <div class="card-content">
+                        <div class="seo-score">
+                            <div class="score-circle">
+                                <span class="score-value">75</span>
+                            </div>
+                            <div class="score-label">Good</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CTR Chart Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Click-Through Rate Trend</h3>
+                        <p class="card-description">Average CTR performance over the last 14 days</p>
+                    </div>
+                    <div class="card-content">
+                        <div class="chart-container">
+                            <div class="chart-line"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Keywords Table -->
+                <div class="card keywords-table">
+                    <div class="card-header">
+                        <h3 class="card-title">Keyword Rankings</h3>
+                        <p class="card-description">Your top performing keywords and their search positions</p>
+                    </div>
+                    <div class="card-content">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Keyword</th>
+                                    <th>Position</th>
+                                    <th>Clicks</th>
+                                    <th>Impressions</th>
+                                    <th>CTR</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="keyword">seo tools</td>
+                                    <td><span class="position top3">#2</span></td>
+                                    <td>142</td>
+                                    <td>3,247</td>
+                                    <td>4.37%</td>
+                                    <td>Aug 15, 2025</td>
+                                </tr>
+                                <tr>
+                                    <td class="keyword">keyword research</td>
+                                    <td><span class="position top10">#7</span></td>
+                                    <td>89</td>
+                                    <td>2,156</td>
+                                    <td>4.13%</td>
+                                    <td>Aug 15, 2025</td>
+                                </tr>
+                                <tr>
+                                    <td class="keyword">search engine optimization</td>
+                                    <td><span class="position top3">#3</span></td>
+                                    <td>203</td>
+                                    <td>5,891</td>
+                                    <td>3.45%</td>
+                                    <td>Aug 15, 2025</td>
+                                </tr>
+                                <tr>
+                                    <td class="keyword">website analytics</td>
+                                    <td><span class="position other">#15</span></td>
+                                    <td>34</td>
+                                    <td>1,423</td>
+                                    <td>2.39%</td>
+                                    <td>Aug 15, 2025</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
