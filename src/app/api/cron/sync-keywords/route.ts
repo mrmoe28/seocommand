@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
-import { sites, users, googleTokens, reports } from '@/lib/db/schema';
+import { sites, googleTokens, reports } from '@/lib/db/schema';
 import { googleApiService } from '@/lib/google-api';
 import { eq } from 'drizzle-orm';
 
@@ -15,19 +15,28 @@ export async function GET(request: NextRequest) {
     console.log('Starting daily keyword sync...');
 
     // Get all sites that need syncing
-    const allSites = await db
-      .select({
-        site: sites,
-        userId: users.id,
-      })
-      .from(sites)
-      .innerJoin(users, eq(sites.userId, users.id))
-      .innerJoin(googleTokens, eq(googleTokens.userId, users.id));
+    const allSites = await (db as any)
+      .select()
+      .from(sites);
 
     let syncedSites = 0;
     let errors = 0;
 
-    for (const { site, userId } of allSites) {
+    for (const site of allSites) {
+      const userId = site.userId;
+      
+      // Check if user has Google tokens
+      const userTokens = await (db as any)
+        .select()
+        .from(googleTokens)
+        .where(eq(googleTokens.userId, userId))
+        .limit(1);
+      
+      if (userTokens.length === 0) {
+        console.log(`Skipping site ${site.domain} - no Google tokens found for user ${userId}`);
+        continue;
+      }
+      
       try {
         console.log(`Syncing data for site: ${site.domain}`);
         
