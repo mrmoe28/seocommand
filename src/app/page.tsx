@@ -120,7 +120,8 @@ export default async function Home() {
       <footer className="bg-background border-t">
         <div className="container mx-auto px-4 py-8">
           <div className="text-center text-muted-foreground">
-            <p>&copy; 2025 SEO SiteWatcher. Built with Next.js and deployed on Netlify.</p>
+            <p>&copy; 2025 SEO SiteWatcher. Built with Next.js and deployed on Vercel.</p>
+            {/* Trigger deployment */}
           </div>
         </div>
       </footer>
