@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { sites } from '@/lib/db/schema';
+import { getDb, sites } from '@/lib/db';
 import { eq } from 'drizzle-orm';
 
 export async function POST(request: NextRequest) {
@@ -31,7 +30,7 @@ export async function POST(request: NextRequest) {
     // TODO: Implement Google Search Console integration when ready
 
     // Check if site is already added
-    const existingSite = await db
+    const existingSite = await getDb()
       .select()
       .from(sites)
       .where(eq(sites.url, validUrl.href))
@@ -48,7 +47,7 @@ export async function POST(request: NextRequest) {
 
     // Add site to database
     const domain = validUrl.hostname;
-    const [newSite] = await db
+    const [newSite] = await getDb()
       .insert(sites)
       .values({
         userId,
@@ -79,7 +78,7 @@ export async function GET() {
     
     const userId = "demo-user"; // Use demo user for testing
 
-    const userSites = await db
+    const userSites = await getDb()
       .select()
       .from(sites)
       .where(eq(sites.userId, userId));

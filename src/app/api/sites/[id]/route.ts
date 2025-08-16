@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { db } from '@/lib/db';
-import { sites, keywords, reports } from '@/lib/db/schema';
+import { getDb, sites, keywords, reports } from '@/lib/db';
 import { eq, and } from 'drizzle-orm';
 
 export async function DELETE(
@@ -24,7 +23,7 @@ export async function DELETE(
     }
 
     // Verify site belongs to user
-    const site = await db
+    const site = await getDb()
       .select()
       .from(sites)
       .where(and(eq(sites.id, siteId), eq(sites.userId, userId)))
@@ -35,11 +34,11 @@ export async function DELETE(
     }
 
     // Delete associated keywords and reports (cascade)
-    await db.delete(keywords).where(eq(keywords.siteId, siteId));
-    await db.delete(reports).where(eq(reports.siteId, siteId));
+    await getDb().delete(keywords).where(eq(keywords.siteId, siteId));
+    await getDb().delete(reports).where(eq(reports.siteId, siteId));
     
     // Delete the site
-    await db.delete(sites).where(eq(sites.id, siteId));
+    await getDb().delete(sites).where(eq(sites.id, siteId));
 
     return NextResponse.json({ success: true });
   } catch (error) {

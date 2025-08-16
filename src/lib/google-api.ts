@@ -1,20 +1,10 @@
 import { google } from 'googleapis';
-import { db } from '@/lib/db';
-import { googleTokens, keywords } from '@/lib/db/schema';
+import { getDb, googleTokens, keywords } from '@/lib/db';
 import { eq } from 'drizzle-orm';
-
-// Type for Google Search Console query data
-interface SearchConsoleQuery {
-  keys: string[];
-  clicks: number;
-  impressions: number;
-  ctr: number;
-  position: number;
-}
 
 export class GoogleAPIService {
   private async getOAuth2Client(userId: string) {
-    const tokens = await db
+    const tokens = await getDb()
       .select()
       .from(googleTokens)
       .where(eq(googleTokens.userId, userId))
@@ -38,7 +28,7 @@ export class GoogleAPIService {
     // Handle token refresh
     oauth2Client.on('tokens', async (newTokens) => {
       if (newTokens.access_token) {
-        await db
+        await getDb()
           .update(googleTokens)
           .set({
             accessToken: newTokens.access_token,
@@ -111,36 +101,42 @@ export class GoogleAPIService {
       const data = await this.getSearchConsoleData(userId, siteUrl, startDate, endDate);
       
       // Process and save keyword data
-      const keywordPromises = data.queries.map(async (query: SearchConsoleQuery) => {
-        const position = query.position || 0;
-        const clicks = query.clicks || 0;
-        const impressions = query.impressions || 0;
-        const ctr = query.ctr || 0;
+      const keywordPromises = data.queries
+        .filter((query) => query.keys && query.keys.length > 0)
+        .map(async (query) => {
+          const position = query.position || 0;
+          const clicks = query.clicks || 0;
+          const impressions = query.impressions || 0;
+          const ctr = query.ctr || 0;
+          const keyword = query.keys?.[0] || '';
 
-        return db
-          .insert(keywords)
-          .values({
-            siteId,
-            keyword: query.keys[0],
-            position,
-            clicks,
-            impressions,
-            ctr,
-            date: endDate,
-          })
-          .onConflictDoUpdate({
-            target: [keywords.siteId, keywords.keyword, keywords.date],
-            set: {
+          if (!keyword) return null;
+
+          return getDb()
+            .insert(keywords)
+            .values({
+              siteId,
+              keyword,
               position,
               clicks,
               impressions,
               ctr,
-            },
-          });
-      });
+              date: endDate,
+            })
+            .onConflictDoUpdate({
+              target: [keywords.siteId, keywords.keyword, keywords.date],
+              set: {
+                position,
+                clicks,
+                impressions,
+                ctr,
+              },
+            });
+        });
 
-      await Promise.all(keywordPromises);
-      return { success: true, keywordCount: data.queries.length };
+      const results = await Promise.all(keywordPromises);
+      const validResults = results.filter(result => result !== null);
+      return { success: true, keywordCount: validResults.length };
     } catch (error) {
       console.error('Error syncing keyword data:', error);
       throw error;
@@ -177,7 +173,7 @@ export class GoogleAPIService {
 
   async calculateSEOScore(siteId: number): Promise<{ score: number; recommendations: string[] }> {
     // Get recent keyword data
-    const recentKeywords = await db
+    const recentKeywords = await getDb()
       .select()
       .from(keywords)
       .where(eq(keywords.siteId, siteId))

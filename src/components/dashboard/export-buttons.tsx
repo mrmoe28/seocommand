@@ -20,7 +20,7 @@ export function ExportButtons({ keywords, site, seoScore = 0, recommendations = 
 
   const handleCSVExport = () => {
     try {
-      const csvContent = ExportService.generateCSV(keywords, site);
+      const csvContent = ExportService.generateCSV(keywords);
       const filename = `keywords-${site.domain}-${new Date().toISOString().split('T')[0]}.csv`;
       ExportService.downloadCSV(csvContent, filename);
       toast.success('CSV exported successfully!');

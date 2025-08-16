@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { googleApiService } from '@/lib/google-api';
-import { db } from '@/lib/db';
-import { sites, reports } from '@/lib/db/schema';
+import { getDb, sites, reports } from '@/lib/db';
 import { eq } from 'drizzle-orm';
 
 export async function POST(request: NextRequest) {
@@ -17,7 +16,7 @@ export async function POST(request: NextRequest) {
     const { siteId } = await request.json();
 
     // Get site details
-    const site = await db
+    const site = await getDb()
       .select()
       .from(sites)
       .where(eq(sites.id, siteId))
@@ -38,7 +37,7 @@ export async function POST(request: NextRequest) {
     const seoData = await googleApiService.calculateSEOScore(siteId);
 
     // Save report
-    await db.insert(reports).values({
+    await getDb().insert(reports).values({
       siteId,
       seoScore: seoData.score,
       recommendations: seoData.recommendations,

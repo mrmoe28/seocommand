@@ -49,8 +49,9 @@ export class SEOAnalyzer {
       
       // Fetch the webpage with better headers
       const response = await fetch(validUrl.href, {
+        method: 'GET',
         headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+          'User-Agent': 'Mozilla/5.0 (compatible; SEO-SiteWatcher/1.0)',
           'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
           'Accept-Language': 'en-US,en;q=0.5',
           'Accept-Encoding': 'gzip, deflate, br',
@@ -59,7 +60,6 @@ export class SEOAnalyzer {
           'Upgrade-Insecure-Requests': '1',
         },
         redirect: 'follow',
-        timeout: 10000, // 10 second timeout
       });
 
       if (!response.ok) {
@@ -115,7 +115,7 @@ export class SEOAnalyzer {
 
   private analyzeSEOElements(html: string) {
     // Title analysis using regex
-    const titleMatch = html.match(/<title[^>]*>(.*?)<\/title>/is);
+    const titleMatch = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
     const title = titleMatch ? titleMatch[1].trim() : null;
     const titleLength = title?.length || 0;
 
@@ -125,13 +125,13 @@ export class SEOAnalyzer {
     const metaDescriptionLength = metaDescription?.length || 0;
 
     // Header tags analysis using regex
-    const h1Matches = html.match(/<h1[^>]*>(.*?)<\/h1>/gis) || [];
+    const h1Matches = html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/gi) || [];
     const h1Tags = h1Matches.map(match => {
       const content = match.replace(/<[^>]*>/g, '').trim();
       return content;
     });
 
-    const h2Matches = html.match(/<h2[^>]*>(.*?)<\/h2>/gis) || [];
+    const h2Matches = html.match(/<h2[^>]*>([\s\S]*?)<\/h2>/gi) || [];
     const h2Tags = h2Matches.map(match => {
       const content = match.replace(/<[^>]*>/g, '').trim();
       return content;
