@@ -1,0 +1,9 @@
+# Documentation files
+README.md
+DEPLOYMENT.md
+
+# Development files
+dev.db
+docs/
+prompt.txt
+google-api-setup.txt
