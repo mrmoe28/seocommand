@@ -6,6 +6,13 @@ import { db } from '@/lib/db';
 import { users, googleTokens } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 
+// Extend the session type to include custom properties
+declare module 'next-auth' {
+  interface Session {
+    hasGoogleAccess?: boolean;
+  }
+}
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: DrizzleAdapter(db),
   providers: [
@@ -65,7 +72,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       return token;
     },
-    async session({ session, token }) {
+    async session({ session }) {
       if (session?.user?.email) {
         // Get user from database
         const dbUser = await db
@@ -84,7 +91,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             .where(eq(googleTokens.userId, dbUser[0].id))
             .limit(1);
 
-          (session as any).hasGoogleAccess = tokens.length > 0;
+          session.hasGoogleAccess = tokens.length > 0;
         }
       }
       return session;

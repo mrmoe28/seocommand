@@ -3,7 +3,6 @@
 import * as React from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { cn } from '@/lib/utils';
 import {
   Sidebar,
   SidebarContent,
@@ -29,7 +28,6 @@ import {
   Moon,
   Sun,
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { signOut } from 'next-auth/react';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';

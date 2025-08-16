@@ -1,7 +1,7 @@
 import { Keyword, Site } from '@/lib/db/schema';
 
 export class ExportService {
-  static generateCSV(keywords: Keyword[], site: Site): string {
+  static generateCSV(keywords: Keyword[]): string {
     const headers = ['Keyword', 'Position', 'Clicks', 'Impressions', 'CTR', 'Date'];
     
     const csvContent = [
@@ -48,7 +48,6 @@ export class ExportService {
   }): Promise<void> {
     // Dynamic import to avoid SSR issues
     const jsPDF = (await import('jspdf')).default;
-    const html2canvas = (await import('html2canvas')).default;
 
     const pdf = new jsPDF();
     const pageWidth = pdf.internal.pageSize.getWidth();

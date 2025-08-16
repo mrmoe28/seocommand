@@ -5,7 +5,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Separator } from '@/components/ui/separator';
 import { 
   Select, 
   SelectContent, 
@@ -22,8 +21,6 @@ import {
   TrendingUp, 
   Globe,
   FileText,
-  Image,
-  Link2,
   Clock,
   Smartphone,
   ShieldCheck
@@ -303,11 +300,6 @@ export function WebsitesAnalyzer({ sites }: WebsitesAnalyzerProps) {
     return 'text-red-600';
   };
 
-  const getProgressColor = (score: number) => {
-    if (score >= 80) return 'bg-green-500';
-    if (score >= 60) return 'bg-yellow-500';
-    return 'bg-red-500';
-  };
 
   return (
     <div className="space-y-6">

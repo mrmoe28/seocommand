@@ -104,7 +104,7 @@ export function WebsitesTable({ sites, hasGoogleAccess }: WebsitesTableProps) {
       <CardHeader>
         <CardTitle>Your Websites</CardTitle>
         <CardDescription>
-          Monitor and manage your websites' SEO performance
+          Monitor and manage your websites&apos; SEO performance
         </CardDescription>
       </CardHeader>
       <CardContent>

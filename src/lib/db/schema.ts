@@ -1,4 +1,4 @@
-import { pgTable, serial, text, timestamp, integer, real, date, json, primaryKey, boolean } from 'drizzle-orm/pg-core';
+import { pgTable, serial, text, timestamp, integer, real, date, json, primaryKey } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
 // NextAuth required tables

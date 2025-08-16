@@ -47,7 +47,7 @@ export function GoogleConnectCard({ hasGoogleAccess }: GoogleConnectCardProps) {
         {!hasGoogleAccess && (
           <>
             <div className="space-y-4">
-              <h4 className="font-medium">What you'll get access to:</h4>
+              <h4 className="font-medium">What you&apos;ll get access to:</h4>
               <ul className="space-y-2 text-sm">
                 <li className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-600" />

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { signIn, getSession } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -28,7 +28,7 @@ export default function SignIn() {
       } else {
         toast.error('Something went wrong. Please try again.');
       }
-    } catch (error) {
+    } catch {
       toast.error('Failed to send sign-in email');
     } finally {
       setIsLoading(false);
@@ -39,7 +39,7 @@ export default function SignIn() {
     setIsLoading(true);
     try {
       await signIn('google', { callbackUrl: '/dashboard' });
-    } catch (error) {
+    } catch {
       toast.error('Failed to sign in with Google');
       setIsLoading(false);
     }
@@ -54,7 +54,7 @@ export default function SignIn() {
           </div>
           <CardTitle className="text-2xl font-bold">SEO SiteWatcher</CardTitle>
           <CardDescription>
-            Monitor your website's SEO health and keyword rankings
+            Monitor your website&apos;s SEO health and keyword rankings
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

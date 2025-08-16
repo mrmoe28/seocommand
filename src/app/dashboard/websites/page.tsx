@@ -7,9 +7,10 @@ import { WebsitesAnalyzer } from '@/components/dashboard/websites-analyzer';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Plus } from 'lucide-react';
+import type { Site } from '@/lib/db/schema';
 
 export default function WebsitesPage() {
-  const [sites, setSites] = useState<any[]>([]);
+  const [sites, setSites] = useState<Site[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchSites = async () => {

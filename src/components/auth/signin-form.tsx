@@ -30,7 +30,7 @@ export function SignInForm() {
       } else {
         setMessage('Check your email for a sign-in link!');
       }
-    } catch (error) {
+    } catch {
       setMessage('Something went wrong. Please try again.');
     } finally {
       setIsLoading(false);
@@ -41,7 +41,7 @@ export function SignInForm() {
     setIsGoogleLoading(true);
     try {
       await signIn('google', { callbackUrl: '/dashboard' });
-    } catch (error) {
+    } catch {
       setMessage('Failed to sign in with Google. Please try again.');
       setIsGoogleLoading(false);
     }

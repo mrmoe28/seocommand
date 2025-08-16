@@ -1,7 +1,16 @@
 import { google } from 'googleapis';
 import { db } from '@/lib/db';
-import { googleTokens, keywords, sites } from '@/lib/db/schema';
+import { googleTokens, keywords } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
+
+// Type for Google Search Console query data
+interface SearchConsoleQuery {
+  keys: string[];
+  clicks: number;
+  impressions: number;
+  ctr: number;
+  position: number;
+}
 
 export class GoogleAPIService {
   private async getOAuth2Client(userId: string) {
@@ -102,7 +111,7 @@ export class GoogleAPIService {
       const data = await this.getSearchConsoleData(userId, siteUrl, startDate, endDate);
       
       // Process and save keyword data
-      const keywordPromises = data.queries.map(async (query: any) => {
+      const keywordPromises = data.queries.map(async (query: SearchConsoleQuery) => {
         const position = query.position || 0;
         const clicks = query.clicks || 0;
         const impressions = query.impressions || 0;

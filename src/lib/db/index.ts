@@ -1,25 +1,26 @@
 // Dynamic import based on database type
+import Database from 'better-sqlite3';
+import { drizzle as drizzleSqlite } from 'drizzle-orm/better-sqlite3';
+import { drizzle as drizzleNeon } from 'drizzle-orm/neon-http';
+import { neon } from '@neondatabase/serverless';
+import * as schemaPostgres from './schema';
+import * as schemaSQLite from './schema-sqlite';
+
 const isSQLite = process.env.DATABASE_URL?.startsWith('file:');
 
-let db: any;
-let schema: any;
+let db: ReturnType<typeof drizzleSqlite> | ReturnType<typeof drizzleNeon>;
+let schema: typeof schemaPostgres | typeof schemaSQLite;
 
 if (isSQLite) {
   // Use SQLite for local development
-  const Database = require('better-sqlite3');
-  const { drizzle } = require('drizzle-orm/better-sqlite3');
-  schema = require('./schema-sqlite');
-  
+  schema = schemaSQLite;
   const sqlite = new Database(process.env.DATABASE_URL!.replace('file:', ''));
-  db = drizzle(sqlite, { schema });
+  db = drizzleSqlite(sqlite, { schema });
 } else {
   // Use NeonDB for production
-  const { drizzle } = require('drizzle-orm/neon-http');
-  const { neon } = require('@neondatabase/serverless');
-  schema = require('./schema');
-  
+  schema = schemaPostgres;
   const sql = neon(process.env.DATABASE_URL!);
-  db = drizzle(sql, { schema });
+  db = drizzleNeon(sql, { schema });
 }
 
 export { db };

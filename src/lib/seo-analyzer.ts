@@ -173,7 +173,7 @@ export class SEOAnalyzer {
     };
   }
 
-  private calculateMetrics(seoElements: any, html: string) {
+  private calculateMetrics(seoElements: SEOAnalysisResult['seoElements'], html: string) {
     // Basic performance estimation based on content size
     const htmlSize = html.length;
     const pageSpeed = Math.max(0, Math.min(100, 100 - (htmlSize / 1000))); // Rough estimation
@@ -214,7 +214,7 @@ export class SEOAnalyzer {
     };
   }
 
-  private generateIssuesAndRecommendations(seoElements: any, metrics: any) {
+  private generateIssuesAndRecommendations(seoElements: SEOAnalysisResult['seoElements'], metrics: SEOAnalysisResult['metrics']) {
     const issues: SEOAnalysisResult['issues'] = [];
     const recommendations: string[] = [];
 
@@ -338,7 +338,7 @@ export class SEOAnalyzer {
     return { issues, recommendations };
   }
 
-  private calculateOverallScore(metrics: any): number {
+  private calculateOverallScore(metrics: SEOAnalysisResult['metrics']): number {
     const weights = {
       seoScore: 0.3,
       performance: 0.25,

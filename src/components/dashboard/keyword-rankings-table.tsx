@@ -10,7 +10,6 @@ import {
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowUp, ArrowDown, Minus } from 'lucide-react';
 import { Keyword, Site } from '@/lib/db/schema';
 import { ExportButtons } from './export-buttons';
 
