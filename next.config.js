@@ -5,7 +5,7 @@ const nextConfig = {
   },
   env: {
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
-    BUILD_TIME: 'true',
+    BUILD_TIME: process.env.NODE_ENV === 'production' ? 'true' : process.env.BUILD_TIME || 'false',
   },
   async rewrites() {
     return [
