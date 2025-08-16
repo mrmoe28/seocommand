@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { sites } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
-import { googleApiService } from '@/lib/google-api';
 
 export async function POST(request: NextRequest) {
   try {

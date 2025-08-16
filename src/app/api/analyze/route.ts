@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { SEOAnalyzer } from '@/lib/seo-analyzer';
-import { auth } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
   try {
